@@ -6,8 +6,16 @@
 //  Copyright © 2017 Daniel Kindler. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class User: NSObject {
-
+struct User {
+    let id: Int
+    let username: String
+    let avatar: URL?
+    
+    init(id: Int, username: String, avatar: URL? = nil) {
+        self.id = id
+        self.username = username
+        self.avatar = avatar
+    }
 }

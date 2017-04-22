@@ -8,7 +8,7 @@
 
 import UIKit
 
-class IssuesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class IssueListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var didSelectIssue: ((Issue) -> Void)?
     var issues = [Issue]() {
@@ -26,12 +26,37 @@ class IssuesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return tv
     }()
     
-    static func defaultInstance(for repo: Repo) -> IssuesViewController {
-        let issuesVC = IssuesViewController()
+    static func defaultInstance(for repo: Repo) -> IssueListViewController {
+        let issuesVC = IssueListViewController()
+
+        GithubClient.fetchIssues(repo: repo).call { (issues, error) in
+            //TODO: Handle Error
+            guard let issues = issues as? [Issue] else {
+                issuesVC.issues = [Issue]()
+                return
+            }
+            
+            issuesVC.issues = issues
+        }
         
-        GithubClient().fetchIssues(for: repo, completion: { (issues, error) in
-            issuesVC.issues = issues ?? [Issue]()
-        })
+        issuesVC.didSelectIssue = { (issue) in
+            let singleIssueVC = IssueViewController()
+
+            GithubClient.fetchComments(issue: issue).call(completion: { (comments, error) in
+                //TODO: Handle Error
+                let firstComment = Comment(id: 0, body: issue.body, author: issue.author)
+                guard let comments = comments as? [Comment] else {
+                    singleIssueVC.comments = [firstComment]
+                    return
+                }
+                
+                var cs = [firstComment]
+                cs.append(contentsOf: comments)
+                singleIssueVC.comments = cs
+            })
+            
+            issuesVC.show(singleIssueVC, sender: issuesVC)
+        }
         
         return issuesVC
     }

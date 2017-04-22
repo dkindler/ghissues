@@ -7,21 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		164363C71EABF2AA00421137 /* ObjectParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164363C61EABF2AA00421137 /* ObjectParser.swift */; };
+		1689D6701EA94B2600915A28 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689D66F1EA94B2600915A28 /* Issue.swift */; };
+		1689D6741EA9542B00915A28 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689D6731EA9542B00915A28 /* User.swift */; };
+		1689D67B1EA959C900915A28 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689D67A1EA959C900915A28 /* Comment.swift */; };
+		1689D67D1EA95AF500915A28 /* IssueListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689D67C1EA95AF500915A28 /* IssueListViewController.swift */; };
+		1689D67F1EA95ECB00915A28 /* IssueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689D67E1EA95ECB00915A28 /* IssueViewController.swift */; };
+		1689D6821EA9620E00915A28 /* CommentCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689D6811EA9620E00915A28 /* CommentCellLayout.swift */; };
 		16A7625B1EA8FC28004EDDED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A7625A1EA8FC28004EDDED /* AppDelegate.swift */; };
-		16A7625D1EA8FC28004EDDED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A7625C1EA8FC28004EDDED /* ViewController.swift */; };
-		16A762601EA8FC28004EDDED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16A7625E1EA8FC28004EDDED /* Main.storyboard */; };
 		16A762621EA8FC28004EDDED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16A762611EA8FC28004EDDED /* Assets.xcassets */; };
 		16A762651EA8FC28004EDDED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16A762631EA8FC28004EDDED /* LaunchScreen.storyboard */; };
+		16A7626D1EA8FD46004EDDED /* RepoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A7626C1EA8FD46004EDDED /* RepoListViewController.swift */; };
+		16A762711EA8FEBC004EDDED /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A762701EA8FEBC004EDDED /* Repo.swift */; };
+		16A762751EA92AC5004EDDED /* GithubClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A762741EA92AC5004EDDED /* GithubClient.swift */; };
+		F7BE041C8DDADA8344297A8A /* Pods_ghissues.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D35BC45D237CFCB119D53547 /* Pods_ghissues.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		164363C61EABF2AA00421137 /* ObjectParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectParser.swift; sourceTree = "<group>"; };
+		1689D66F1EA94B2600915A28 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
+		1689D6731EA9542B00915A28 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		1689D67A1EA959C900915A28 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		1689D67C1EA95AF500915A28 /* IssueListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IssueListViewController.swift; sourceTree = "<group>"; };
+		1689D67E1EA95ECB00915A28 /* IssueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IssueViewController.swift; sourceTree = "<group>"; };
+		1689D6811EA9620E00915A28 /* CommentCellLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCellLayout.swift; sourceTree = "<group>"; };
 		16A762571EA8FC28004EDDED /* ghissues.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ghissues.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16A7625A1EA8FC28004EDDED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		16A7625C1EA8FC28004EDDED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		16A7625F1EA8FC28004EDDED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		16A762611EA8FC28004EDDED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		16A762641EA8FC28004EDDED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		16A762661EA8FC28004EDDED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16A7626C1EA8FD46004EDDED /* RepoListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepoListViewController.swift; sourceTree = "<group>"; };
+		16A762701EA8FEBC004EDDED /* Repo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
+		16A762741EA92AC5004EDDED /* GithubClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubClient.swift; sourceTree = "<group>"; };
+		8C2BFBF019434FDB6C98D829 /* Pods-ghissues.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ghissues.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ghissues/Pods-ghissues.debug.xcconfig"; sourceTree = "<group>"; };
+		D35BC45D237CFCB119D53547 /* Pods_ghissues.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ghissues.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF594F7B405B1AA9FB7E50DD /* Pods-ghissues.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ghissues.release.xcconfig"; path = "Pods/Target Support Files/Pods-ghissues/Pods-ghissues.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +49,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7BE041C8DDADA8344297A8A /* Pods_ghissues.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1689D6801EA961B000915A28 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1689D6811EA9620E00915A28 /* CommentCellLayout.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		16A7624E1EA8FC28004EDDED = {
 			isa = PBXGroup;
 			children = (
 				16A762591EA8FC28004EDDED /* ghissues */,
 				16A762581EA8FC28004EDDED /* Products */,
+				907CA7F5E4B5BC533D02EE13 /* Pods */,
+				2A58BE4360783649BE21E7D9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +85,55 @@
 		16A762591EA8FC28004EDDED /* ghissues */ = {
 			isa = PBXGroup;
 			children = (
+				1689D6801EA961B000915A28 /* View */,
+				16A7626F1EA8FEB0004EDDED /* Data */,
+				16A7626E1EA8FD4C004EDDED /* Controllers */,
 				16A7625A1EA8FC28004EDDED /* AppDelegate.swift */,
-				16A7625C1EA8FC28004EDDED /* ViewController.swift */,
-				16A7625E1EA8FC28004EDDED /* Main.storyboard */,
 				16A762611EA8FC28004EDDED /* Assets.xcassets */,
 				16A762631EA8FC28004EDDED /* LaunchScreen.storyboard */,
 				16A762661EA8FC28004EDDED /* Info.plist */,
 			);
 			path = ghissues;
+			sourceTree = "<group>";
+		};
+		16A7626E1EA8FD4C004EDDED /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				16A7626C1EA8FD46004EDDED /* RepoListViewController.swift */,
+				1689D67C1EA95AF500915A28 /* IssueListViewController.swift */,
+				1689D67E1EA95ECB00915A28 /* IssueViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		16A7626F1EA8FEB0004EDDED /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				164363C61EABF2AA00421137 /* ObjectParser.swift */,
+				16A762741EA92AC5004EDDED /* GithubClient.swift */,
+				16A762701EA8FEBC004EDDED /* Repo.swift */,
+				1689D66F1EA94B2600915A28 /* Issue.swift */,
+				1689D6731EA9542B00915A28 /* User.swift */,
+				1689D67A1EA959C900915A28 /* Comment.swift */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		2A58BE4360783649BE21E7D9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D35BC45D237CFCB119D53547 /* Pods_ghissues.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		907CA7F5E4B5BC533D02EE13 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8C2BFBF019434FDB6C98D829 /* Pods-ghissues.debug.xcconfig */,
+				FF594F7B405B1AA9FB7E50DD /* Pods-ghissues.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +143,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16A762691EA8FC28004EDDED /* Build configuration list for PBXNativeTarget "ghissues" */;
 			buildPhases = (
+				BEB1FF28D2A775BC2CC6299F /* [CP] Check Pods Manifest.lock */,
 				16A762531EA8FC28004EDDED /* Sources */,
 				16A762541EA8FC28004EDDED /* Frameworks */,
 				16A762551EA8FC28004EDDED /* Resources */,
+				4EE58F7068439F22464B0399 /* [CP] Embed Pods Frameworks */,
+				FBFAB9AF7D1B7606967FB6A4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -96,6 +171,7 @@
 				TargetAttributes = {
 					16A762561EA8FC28004EDDED = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = QJZELDAJAM;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -125,33 +201,81 @@
 			files = (
 				16A762651EA8FC28004EDDED /* LaunchScreen.storyboard in Resources */,
 				16A762621EA8FC28004EDDED /* Assets.xcassets in Resources */,
-				16A762601EA8FC28004EDDED /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4EE58F7068439F22464B0399 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ghissues/Pods-ghissues-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BEB1FF28D2A775BC2CC6299F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FBFAB9AF7D1B7606967FB6A4 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ghissues/Pods-ghissues-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		16A762531EA8FC28004EDDED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16A7625D1EA8FC28004EDDED /* ViewController.swift in Sources */,
+				1689D67F1EA95ECB00915A28 /* IssueViewController.swift in Sources */,
+				16A762711EA8FEBC004EDDED /* Repo.swift in Sources */,
+				16A7626D1EA8FD46004EDDED /* RepoListViewController.swift in Sources */,
+				16A762751EA92AC5004EDDED /* GithubClient.swift in Sources */,
+				1689D6741EA9542B00915A28 /* User.swift in Sources */,
+				1689D67B1EA959C900915A28 /* Comment.swift in Sources */,
+				164363C71EABF2AA00421137 /* ObjectParser.swift in Sources */,
+				1689D6821EA9620E00915A28 /* CommentCellLayout.swift in Sources */,
 				16A7625B1EA8FC28004EDDED /* AppDelegate.swift in Sources */,
+				1689D67D1EA95AF500915A28 /* IssueListViewController.swift in Sources */,
+				1689D6701EA94B2600915A28 /* Issue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		16A7625E1EA8FC28004EDDED /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				16A7625F1EA8FC28004EDDED /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		16A762631EA8FC28004EDDED /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -260,8 +384,10 @@
 		};
 		16A7626A1EA8FC28004EDDED /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C2BFBF019434FDB6C98D829 /* Pods-ghissues.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = QJZELDAJAM;
 				INFOPLIST_FILE = ghissues/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Daniel-Kindler.ghissues";
@@ -272,8 +398,10 @@
 		};
 		16A7626B1EA8FC28004EDDED /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF594F7B405B1AA9FB7E50DD /* Pods-ghissues.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = QJZELDAJAM;
 				INFOPLIST_FILE = ghissues/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Daniel-Kindler.ghissues";
@@ -301,6 +429,7 @@
 				16A7626B1EA8FC28004EDDED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

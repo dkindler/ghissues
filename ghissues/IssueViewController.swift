@@ -7,29 +7,66 @@
 //
 
 import UIKit
+import LayoutKit
 
-class IssueViewController: UIViewController {
+class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDelegate {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    private var reloadableViewLayoutAdapter: CustomReloadableViewLayoutAdapter!
+    
+    var comments = [Comment]() {
+        didSet {
+            layout()
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: self.view.frame)
+        self.reloadableViewLayoutAdapter = CustomReloadableViewLayoutAdapter(reloadableView: tv)
+        self.reloadableViewLayoutAdapter.delegate = self
+        tv.allowsSelection = false
+        tv.separatorStyle = .none
+        tv.dataSource = self.reloadableViewLayoutAdapter
+        tv.delegate = self.reloadableViewLayoutAdapter
+        tv.backgroundColor = .white
+        tv.frame = self.view.bounds
+        return tv
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.addSubview(tableView)
     }
-    */
+    
+    private func layout() {
+        var layouts = [CommentCellLayout]()
+        for c in comments {
+            let data = CommentCellLayout.Data(username: c.author.username, avatar: c.author.avatar, commentBody: c.body)
+            layouts.append(CommentCellLayout(data: data))
+        }
 
+        reloadableViewLayoutAdapter.reload(width: self.tableView.frame.width, synchronous: true, layoutProvider: {
+            [Section<[Layout]>(header: nil, items: layouts, footer: nil)]
+        })
+    }
+    
+    //MARK: Reloadable View Delegate
+
+    func didSelectItemAt(indexPath: IndexPath) {
+        
+    }
+}
+
+//MARK: CustomReloadableViewLayoutAdapter and Delegate
+
+protocol CustomReloadableViewLayoutAdapterDelegate: class {
+    func didSelectItemAt(indexPath: IndexPath)
+}
+
+class CustomReloadableViewLayoutAdapter: ReloadableViewLayoutAdapter {
+    weak var delegate: CustomReloadableViewLayoutAdapterDelegate?
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.didSelectItemAt(indexPath: indexPath)
+    }
 }
