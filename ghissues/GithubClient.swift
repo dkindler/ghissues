@@ -14,7 +14,7 @@ enum GithubClient {
     case fetchIssues(repo: Repo)
     case fetchRepos(username: String)
     
-    static let baseURL = "https://api.github.com"
+    static private let baseURL = "https://api.github.com"
 
     enum ServiceError: Error {
         case invalid(String)
@@ -53,7 +53,6 @@ enum GithubClient {
                             try completion?(ObjectParser<Issue>.parse(dicts: JSON), nil)
                         }
                     } catch {
-                        print(error.localizedDescription)
                         completion?(nil, error)
                     }
                 } else {
@@ -61,7 +60,6 @@ enum GithubClient {
                 }
             }
         } catch {
-            print(error.localizedDescription)
             completion?(nil, error)
         }
     }

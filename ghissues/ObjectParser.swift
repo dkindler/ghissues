@@ -9,7 +9,6 @@
 import Foundation
 
 struct ObjectParser<T> {
-
     enum ObjectParserError: Error {
         case missing(String)
         case invalid(String)
@@ -78,6 +77,7 @@ struct ObjectParser<T> {
         guard let id = dict["id"] as? Int else { throw ObjectParserError.missing("ID") }
         
         let labelsData = dict["labels"] as? [[String: Any]] ?? [[String: Any]]()
+        let labels = try ObjectParser<Issue.Label>.parse(dicts: labelsData)
         
         let user: User
         do {
@@ -85,9 +85,6 @@ struct ObjectParser<T> {
         } catch {
             throw ObjectParserError.invalid("User")
         }
-        
-        
-        let labels = try ObjectParser<Issue.Label>.parse(dicts: labelsData)
         
         return Issue(id: id, title: title, body: body, labels: labels, commentsURL: commentsURL, author: user)
     }
