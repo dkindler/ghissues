@@ -13,6 +13,7 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
 
     private var reloadableViewLayoutAdapter: CustomReloadableViewLayoutAdapter!
     
+    var issue: Issue?
     var comments = [Comment]() {
         didSet {
             layout()
@@ -43,6 +44,11 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
         for c in comments {
             let data = CommentCellLayout.Data(username: c.author.username, avatar: c.author.avatar, commentBody: c.body)
             layouts.append(CommentCellLayout(data: data))
+        }
+        if let issue = issue {
+            let body = issue.body == "" ? issue.title : issue.body
+            let data = CommentCellLayout.Data(username: issue.author.username, avatar: issue.author.avatar, commentBody: body)
+            layouts.insert(CommentCellLayout(data: data), at: 0)
         }
 
         reloadableViewLayoutAdapter.reload(width: self.tableView.frame.width, synchronous: true, layoutProvider: {

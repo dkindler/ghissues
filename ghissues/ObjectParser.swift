@@ -8,20 +8,15 @@
 
 import Foundation
 
-enum ObjectParser {
-    case issue
-    case repo
-    case user
-    case comment
-    case label
-    
+struct ObjectParser<T> {
+
     enum ObjectParserError: Error {
         case missing(String)
         case invalid(String)
     }
     
-    func parse(dicts: [[String: Any]]) throws -> [Any] {
-        var data = [Any]()
+    static func parse(dicts: [[String: Any]]) throws -> [T] {
+        var data = [T]()
         for d in dicts {
             do {
                 try data.append(self.parse(dict: d))
@@ -33,26 +28,27 @@ enum ObjectParser {
         return data
     }
     
-    func parse(dict: [String: Any]) throws -> Any {
+    static func parse(dict: [String: Any]) throws -> T {
         do {
-            switch self {
-            case .comment:
-                return try self.parseComment(dict: dict)
-            case .issue:
-                return try self.parseIssue(dict: dict)
-            case .label:
-                return try self.parseLabel(dict: dict)
-            case .repo:
-                return try self.parseRepo(dict: dict)
-            case .user:
-                return try self.parseUser(dict: dict)
+            if T.self is Comment.Type {
+               return try self.parseComment(dict: dict) as! T
+            } else if T.self is Issue.Type {
+                return try self.parseIssue(dict: dict) as! T
+            } else if T.self is Issue.Label.Type {
+                return try self.parseLabel(dict: dict) as! T
+            } else if T.self is User.Type {
+                return try self.parseUser(dict: dict) as! T
+            } else if T.self is Repo.Type {
+                return try self.parseRepo(dict: dict) as! T
+            } else {
+                throw ObjectParserError.invalid("Object Type")
             }
         } catch {
             throw error
         }
     }
     
-    private func parseRepo(dict: [String: Any]) throws -> Repo {
+    static private func parseRepo(dict: [String: Any]) throws -> Repo {
         guard let stringURL = dict["url"] as? String else { throw ObjectParserError.missing("URL") }
         guard let stringIssuesURL = dict["issues_url"] as? String else { throw ObjectParserError.missing("Issues URL") }
         guard let name = dict["name"] as? String else { throw ObjectParserError.missing("Name") }
@@ -67,13 +63,13 @@ enum ObjectParser {
         return Repo(id: id, name: name, fullName: fullName, url: url, issuesURL: issuesURL)
     }
     
-    private func parseLabel(dict: [String: Any]) throws -> Issue.Label {
+    static private func parseLabel(dict: [String: Any]) throws -> Issue.Label {
         guard let name = dict["name"] as? String else { throw ObjectParserError.missing("Issue Name") }
         guard let color = dict["color"] as? String else { throw ObjectParserError.missing("Issue Color") }
         return Issue.Label(name: name, color: color)
     }
 
-    private func parseIssue(dict: [String: Any]) throws -> Issue {
+    static private func parseIssue(dict: [String: Any]) throws -> Issue {
         guard let title = dict["title"] as? String else { throw ObjectParserError.missing("Title") }
         guard let body = dict["body"] as? String else { throw ObjectParserError.missing("Body") }
         guard let commentsURLString = dict["comments_url"] as? String else { throw ObjectParserError.missing("Comments URL") }
@@ -83,51 +79,35 @@ enum ObjectParser {
         
         let labelsData = dict["labels"] as? [[String: Any]] ?? [[String: Any]]()
         
-        let user: User?
+        let user: User
         do {
-            user = try ObjectParser.user.parse(dict: userData) as? User
+            user = try ObjectParser<User>.parse(dict: userData)
         } catch {
             throw ObjectParserError.invalid("User")
         }
         
-        typealias Label = Issue.Label
-        var labels = [Label]()
-        for l in labelsData {
-            let label = try ObjectParser.label.parse(dict: l) as? Label
-            if let label = label {
-                labels.append(label)
-            } else {
-                throw ObjectParserError.invalid("Label")
-            }
-        }
         
-        if let user = user {
-            return Issue(id: id, title: title, body: body, labels: labels, commentsURL: commentsURL, author: user)
-        } else {
-            throw ObjectParserError.invalid("User")
-        }
+        let labels = try ObjectParser<Issue.Label>.parse(dicts: labelsData)
+        
+        return Issue(id: id, title: title, body: body, labels: labels, commentsURL: commentsURL, author: user)
     }
     
-    private func parseComment(dict: [String: Any]) throws -> Comment {
+    static private func parseComment(dict: [String: Any]) throws -> Comment {
         guard let id = dict["id"] as? Int else { throw ObjectParserError.missing("id") }
         guard let body = dict["body"] as? String else { throw ObjectParserError.missing("Body") }
         guard let userData = dict["user"] as? [String: Any] else { throw ObjectParserError.missing("User") }
         
-        let user: User?
+        let user: User
         do {
-            user = try ObjectParser.user.parse(dict: userData) as? User
+            user = try ObjectParser<User>.parse(dict: userData)
         } catch {
             throw ObjectParserError.invalid("User")
         }
         
-        if let user = user {
-            return Comment(id: id, body: body, author: user)
-        } else {
-            throw ObjectParserError.invalid("User")
-        }
+        return Comment(id: id, body: body, author: user)
     }
     
-    private func parseUser(dict: [String: Any]) throws -> User {
+    static private func parseUser(dict: [String: Any]) throws -> User {
         guard let username = dict["login"] as? String else { throw ObjectParserError.missing("Username") }
         guard let id = dict["id"] as? Int else { throw ObjectParserError.missing("ID") }
         

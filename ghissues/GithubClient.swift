@@ -10,16 +10,15 @@ import Foundation
 import Alamofire
 
 enum GithubClient {
+    case fetchComments(issue: Issue)
+    case fetchIssues(repo: Repo)
+    case fetchRepos(username: String)
     
     static let baseURL = "https://api.github.com"
 
     enum ServiceError: Error {
         case invalid(String)
     }
-    
-    case fetchComments(issue: Issue)
-    case fetchIssues(repo: Repo)
-    case fetchRepos(username: String)
     
     func url() throws -> URL {
         let url: URL?
@@ -47,11 +46,11 @@ enum GithubClient {
                     do {
                         switch self {
                         case .fetchComments(_):
-                            try completion?(ObjectParser.comment.parse(dicts: JSON), nil)
+                            try completion?(ObjectParser<Comment>.parse(dicts: JSON), nil)
                         case .fetchRepos(_):
-                            try completion?(ObjectParser.repo.parse(dicts: JSON), nil)
+                            try completion?(ObjectParser<Repo>.parse(dicts: JSON), nil)
                         case .fetchIssues(_):
-                            try completion?(ObjectParser.issue.parse(dicts: JSON), nil)
+                            try completion?(ObjectParser<Issue>.parse(dicts: JSON), nil)
                         }
                     } catch {
                         print(error.localizedDescription)

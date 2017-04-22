@@ -41,18 +41,16 @@ class IssueListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         issuesVC.didSelectIssue = { (issue) in
             let singleIssueVC = IssueViewController()
+            singleIssueVC.issue = issue
 
             GithubClient.fetchComments(issue: issue).call(completion: { (comments, error) in
                 //TODO: Handle Error
-                let firstComment = Comment(id: 0, body: issue.body, author: issue.author)
                 guard let comments = comments as? [Comment] else {
-                    singleIssueVC.comments = [firstComment]
+                    singleIssueVC.comments = [Comment]()
                     return
                 }
-                
-                var cs = [firstComment]
-                cs.append(contentsOf: comments)
-                singleIssueVC.comments = cs
+
+                singleIssueVC.comments = comments
             })
             
             issuesVC.show(singleIssueVC, sender: issuesVC)
@@ -92,5 +90,4 @@ class IssueListViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectIssue?(issues[indexPath.item])
     }
-
 }
