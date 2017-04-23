@@ -29,10 +29,10 @@ class IssueListViewController: UIViewController, UITableViewDelegate, UITableVie
     static func defaultInstance(for repo: Repo) -> IssueListViewController {
         let issuesVC = IssueListViewController()
         issuesVC.title = repo.name
-        
-        GithubClient.fetchIssues(repo: repo).call { (issues, error) in
+
+        GithubClient.default.fetchResource(resource: GetIssuesResource(repo: repo)) { issues, error in
             //TODO: Handle Error
-            guard let issues = issues as? [Issue] else {
+            guard let issues = issues else {
                 issuesVC.issues = [Issue]()
                 return
             }
@@ -41,7 +41,7 @@ class IssueListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         issuesVC.didSelectIssue = { (issue) in
-            let singleIssueVC = IssueViewController.defaultInstance(issue: issue)
+            let singleIssueVC = IssueViewController.defaultInstance(repo: repo, issue: issue)
             issuesVC.show(singleIssueVC, sender: issuesVC)
         }
         

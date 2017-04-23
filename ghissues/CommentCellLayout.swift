@@ -12,20 +12,15 @@ import AlamofireImage
 
 class CommentCellLayout: InsetLayout<View> {
     
-    struct Data {
-        let username: String
-        let avatar: URL?
-        let commentBody: String
-        
-        init(username: String, avatar: URL?, commentBody: String) {
-            self.commentBody = commentBody
-            self.avatar = avatar
-            self.username = username
-        }
-    }
+    let username: String
+    let avatar: URL?
+    let commentBody: String
     
-    public init(data: CommentCellLayout.Data) {
-        
+    init(username: String, avatar: URL?, commentBody: String) {
+        self.commentBody = commentBody
+        self.avatar = avatar
+        self.username = username
+
         let profileImage = SizeLayout<UIImageView>(
             size: CGSize(width: 40, height: 40),
             alignment: Alignment.topCenter,
@@ -34,14 +29,14 @@ class CommentCellLayout: InsetLayout<View> {
                 imageView.contentMode = .scaleAspectFill
                 imageView.layer.cornerRadius = 40/2
                 imageView.layer.masksToBounds = true
-                if let url = data.avatar {
+                if let url = avatar {
                     imageView.af_setImage(withURL: url)
                 }
             }
         )
         
         let name = LabelLayout(
-            text: data.username,
+            text: username,
             font: .boldSystemFont(ofSize: CGFloat(14.0)),
             numberOfLines: 1,
             alignment: Alignment.topLeading,
@@ -50,7 +45,7 @@ class CommentCellLayout: InsetLayout<View> {
         
         
         let body = LabelLayout(
-            text: data.commentBody,
+            text: commentBody,
             font: .systemFont(ofSize: CGFloat(16.0), weight: UIFontWeightLight),
             alignment: Alignment.topLeading,
             config: nil

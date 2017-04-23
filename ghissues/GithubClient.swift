@@ -9,58 +9,71 @@
 import Foundation
 import Alamofire
 
-enum GithubClient {
-    case fetchComments(issue: Issue)
-    case fetchIssues(repo: Repo)
-    case fetchRepos(username: String)
-    
-    static private let baseURL = "https://api.github.com"
+protocol Resource {
+    associatedtype ResourceParser: Parser
+
+    var path: String { get }
+}
+
+struct GetCommentsResource: Resource {
+    typealias ResourceParser = CommentParser
+
+    let repo: Repo
+    let issue: Issue
+
+    var path: String {
+        return "/repos/\(repo.fullName)/issues/\(issue.number)/comments"
+    }
+}
+
+struct GetIssuesResource: Resource {
+    typealias ResourceParser = IssueParser
+
+    let repo: Repo
+
+    var path: String {
+        return "/repos/\(repo.fullName)/issues"
+    }
+}
+
+struct GetReposResource: Resource {
+    typealias ResourceParser = RepoParser
+
+    let username: String
+
+    var path: String {
+        return "/users/\(username)/repos"
+    }
+}
+
+
+class GithubClient {
+    private let baseURL: URL
+
+    static let `default` = GithubClient(baseURL: URL(string: "https://api.github.com")!)
+
+    init(baseURL: URL) {
+        self.baseURL = baseURL
+    }
 
     enum ServiceError: Error {
         case invalid(String)
     }
-    
-    func url() throws -> URL {
-        let url: URL?
-        switch self {
-        case .fetchComments(let issue):
-            url = issue.commentsURL
-        case .fetchIssues(let repo):
-            url = URL(string: "\(GithubClient.baseURL)/repos/\(repo.fullName)/issues")
-        case .fetchRepos(let username):
-            url = URL(string: "\(GithubClient.baseURL)/users/\(username)/repos")
-        }
-        
-        if let url = url {
-            return url
-        } else {
-            throw ServiceError.invalid("URL")
-        }
-    }
-    
-    func call(completion:(([Any]?, Error?) -> ())?) {
-        do {
-            let url = try self.url()
-            Alamofire.request(url).responseJSON { (response) in
-                if let JSON = response.result.value as? [[String: Any]] {
-                    do {
-                        switch self {
-                        case .fetchComments(_):
-                            try completion?(ObjectParser<Comment>.parse(dicts: JSON), nil)
-                        case .fetchRepos(_):
-                            try completion?(ObjectParser<Repo>.parse(dicts: JSON), nil)
-                        case .fetchIssues(_):
-                            try completion?(ObjectParser<Issue>.parse(dicts: JSON), nil)
-                        }
-                    } catch {
-                        completion?(nil, error)
-                    }
-                } else {
-                    completion?(nil, ServiceError.invalid("Response"))
+
+    typealias Completion<T> = ((T?, Error?) -> ())
+
+    func fetchResource<R>(resource: R, completion: Completion<[R.ResourceParser.T]>?) where R: Resource {
+        guard let url = URL(string: resource.path, relativeTo: baseURL) else { return }
+
+        Alamofire.request(url).responseJSON { response in
+            if let json = response.result.value as? [[String: Any]] {
+                do {
+                    let result = try json.map { dict in try R.ResourceParser.parse(dict: dict) }
+                    completion?(result, nil)
+                } catch {
+                    completion?(nil, error)
                 }
             }
-        } catch {
-            completion?(nil, error)
         }
     }
 }

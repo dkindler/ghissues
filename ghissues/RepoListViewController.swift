@@ -8,30 +8,59 @@
 
 import UIKit
 
-class RepoListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+class RepoListDataSource: NSObject, UITableViewDataSource {
+    let repos: [Repo]
+    static let reuseIdentifier = "repoCell"
+
+    init(repos: [Repo]) {
+        self.repos = repos
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return repos.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: RepoListDataSource.reuseIdentifier, for: indexPath)
+        cell.textLabel?.text = repos[indexPath.item].name
+        return cell
+    }
+}
+
+class RepoListViewController: UIViewController, UITableViewDelegate {
+
     var didSelectRepo: ((Repo) -> Void)?
     var repos = [Repo]() {
         didSet {
+            dataSource = RepoListDataSource(repos: repos)
             tableView.reloadData()
         }
     }
-    
+
+    var dataSource: RepoListDataSource? {
+        didSet {
+            tableView.dataSource = dataSource
+        }
+    }
+
     lazy var tableView: UITableView = {
         let tv = UITableView()
         tv.delegate = self
-        tv.dataSource = self
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.register(UITableViewCell.self, forCellReuseIdentifier: "repoCell")
+        tv.register(UITableViewCell.self, forCellReuseIdentifier: RepoListDataSource.reuseIdentifier)
         return tv
     }()
     
     static func defaultInstance(for username: String) -> RepoListViewController {
         let repoVC = RepoListViewController()
-        
-        GithubClient.fetchRepos(username: username).call { (repos, error) in
+
+        GithubClient.default.fetchResource(resource: GetReposResource(username: username)) { repos, error in
             //TODO: Handle Error
-            guard let repos = repos as? [Repo] else {
+            guard let repos = repos else {
                 repoVC.repos = [Repo]()
                 return
             }
@@ -57,43 +86,9 @@ class RepoListViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
-    //MARK: Table View Data Source
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return repos.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "repoCell", for: indexPath)
-        cell.textLabel?.text = repos[indexPath.item].name
-        return cell
-    }
-    
     //MARK: Table View Delegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectRepo?(repos[indexPath.item])
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -25,13 +25,15 @@ struct Issue {
     let labels: [Label]
     let commentsURL: URL
     let author: User
-    
-    init(id: Int, title: String, body: String, labels: [Label], commentsURL: URL , author: User) {
+    let number: Int
+
+    init(id: Int, title: String, body: String, labels: [Label], commentsURL: URL , author: User, number: Int) {
         self.id = id
         self.title = title
         self.body = body
         self.labels = labels
         self.commentsURL = commentsURL
         self.author = author
+        self.number = number
     }
 }

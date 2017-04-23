@@ -12,11 +12,12 @@ import LayoutKit
 class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDelegate {
 
     private var reloadableViewLayoutAdapter: CustomReloadableViewLayoutAdapter!
-    
+
+    var repo: Repo?
     var issue: Issue?
     var comments = [Comment]() {
         didSet {
-            layout()
+            reloadTableView()
         }
     }
     
@@ -33,20 +34,20 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
         return tv
     }()
     
-    static func defaultInstance(issue: Issue) -> IssueViewController {
+    static func defaultInstance(repo: Repo, issue: Issue) -> IssueViewController {
         let vc = IssueViewController()
         vc.title = issue.title
         vc.issue = issue
-        
-        GithubClient.fetchComments(issue: issue).call(completion: { (comments, error) in
+
+        GithubClient.default.fetchResource(resource: GetCommentsResource(repo: repo, issue: issue)) { comments, error in
             //TODO: Handle Error
-            guard let comments = comments as? [Comment] else {
+            guard let comments = comments else {
                 vc.comments = [Comment]()
                 return
             }
             
             vc.comments = comments
-        })
+        }
         
         return vc
     }
@@ -57,17 +58,17 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
         view.addSubview(tableView)
     }
     
-    private func layout() {
-        var layouts = [CommentCellLayout]()
-        for c in comments {
-            let data = CommentCellLayout.Data(username: c.author.username, avatar: c.author.avatar, commentBody: c.body)
-            layouts.append(CommentCellLayout(data: data))
-        }
-        if let issue = issue {
-            let body = issue.body == "" ? issue.title : issue.body
-            let data = CommentCellLayout.Data(username: issue.author.username, avatar: issue.author.avatar, commentBody: body)
-            layouts.insert(CommentCellLayout(data: data), at: 0)
-        }
+    private func reloadTableView() {
+        guard let issue = issue else { return }
+
+        let issueLayout = CommentCellLayout(
+            username: issue.author.username,
+            avatar: issue.author.avatar,
+            commentBody: issue.body.isEmpty ? issue.title : issue.body
+        )
+        let commentLayouts = comments.map { c in CommentCellLayout(username: c.author.username, avatar: c.author.avatar, commentBody: c.body) }
+
+        let layouts = [issueLayout] + commentLayouts
 
         reloadableViewLayoutAdapter.reload(width: self.tableView.frame.width, synchronous: true, layoutProvider: {
             [Section<[Layout]>(header: nil, items: layouts, footer: nil)]

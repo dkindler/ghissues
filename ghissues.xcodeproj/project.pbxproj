@@ -56,12 +56,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1689D6801EA961B000915A28 /* View */ = {
+		1689D6801EA961B000915A28 /* Layouts */ = {
 			isa = PBXGroup;
 			children = (
 				1689D6811EA9620E00915A28 /* CommentCellLayout.swift */,
 			);
-			name = View;
+			name = Layouts;
 			sourceTree = "<group>";
 		};
 		16A7624E1EA8FC28004EDDED = {
@@ -85,7 +85,7 @@
 		16A762591EA8FC28004EDDED /* ghissues */ = {
 			isa = PBXGroup;
 			children = (
-				1689D6801EA961B000915A28 /* View */,
+				1689D6801EA961B000915A28 /* Layouts */,
 				16A7626F1EA8FEB0004EDDED /* Data */,
 				16A7626E1EA8FD4C004EDDED /* Controllers */,
 				16A7625A1EA8FC28004EDDED /* AppDelegate.swift */,

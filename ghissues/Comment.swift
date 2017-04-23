@@ -6,8 +6,6 @@
 //  Copyright © 2017 Daniel Kindler. All rights reserved.
 //
 
-import Foundation
-
 struct Comment {
     let id: Int
     let author: User

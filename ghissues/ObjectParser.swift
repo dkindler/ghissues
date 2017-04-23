@@ -8,113 +8,109 @@
 
 import Foundation
 
-struct ObjectParser<T> {
-    enum ObjectParserError: Error {
-        case missing(String)
-        case invalid(String)
-    }
-    
+enum ParserError: Error {
+    case missing(String)
+    case invalid(String)
+}
+
+protocol Parser {
+    associatedtype T
+
+    static func parse(dict: [String: Any]) throws -> T
+}
+
+extension Parser {
     static func parse(dicts: [[String: Any]]) throws -> [T] {
-        var data = [T]()
-        for d in dicts {
-            do {
-                try data.append(self.parse(dict: d))
-            } catch {
-                throw error
-            }
-        }
-        
-        return data
+        return try dicts.map(self.parse)
     }
-    
-    static func parse(dict: [String: Any]) throws -> T {
-        do {
-            if T.self is Comment.Type {
-               return try self.parseComment(dict: dict) as! T
-            } else if T.self is Issue.Type {
-                return try self.parseIssue(dict: dict) as! T
-            } else if T.self is Issue.Label.Type {
-                return try self.parseLabel(dict: dict) as! T
-            } else if T.self is User.Type {
-                return try self.parseUser(dict: dict) as! T
-            } else if T.self is Repo.Type {
-                return try self.parseRepo(dict: dict) as! T
-            } else {
-                throw ObjectParserError.invalid("Object Type")
-            }
-        } catch {
-            throw error
-        }
-    }
-    
-    static private func parseRepo(dict: [String: Any]) throws -> Repo {
-        guard let stringURL = dict["url"] as? String else { throw ObjectParserError.missing("URL") }
-        guard let stringIssuesURL = dict["issues_url"] as? String else { throw ObjectParserError.missing("Issues URL") }
-        guard let name = dict["name"] as? String else { throw ObjectParserError.missing("Name") }
-        guard let fullName = dict["full_name"] as? String else { throw ObjectParserError.missing("Full Name") }
-        guard let url = URL(string: stringURL) else { throw ObjectParserError.invalid("URL String") }
-        guard let id = dict["id"] as? Int else { throw ObjectParserError.missing("ID") }
-        
+}
+
+class RepoParser: Parser {
+    static func parse(dict: [String: Any]) throws -> Repo {
+        guard let stringURL = dict["url"] as? String else { throw ParserError.missing("URL") }
+        guard let stringIssuesURL = dict["issues_url"] as? String else { throw ParserError.missing("Issues URL") }
+        guard let name = dict["name"] as? String else { throw ParserError.missing("Name") }
+        guard let fullName = dict["full_name"] as? String else { throw ParserError.missing("Full Name") }
+        guard let url = URL(string: stringURL) else { throw ParserError.invalid("URL String") }
+        guard let id = dict["id"] as? Int else { throw ParserError.missing("ID") }
+
         // "issues_url" includes "{/number}" at the end of the URL. We must truncate this from the string.
         let endIndex = stringIssuesURL.index(stringIssuesURL.endIndex, offsetBy: -9)
-        guard let issuesURL = URL(string: stringIssuesURL.substring(to: endIndex)) else { throw ObjectParserError.invalid("Issues URL String") }
-        
+        guard let issuesURL = URL(string: stringIssuesURL.substring(to: endIndex)) else { throw ParserError.invalid("Issues URL String") }
+
         return Repo(id: id, name: name, fullName: fullName, url: url, issuesURL: issuesURL)
     }
-    
-    static private func parseLabel(dict: [String: Any]) throws -> Issue.Label {
-        guard let name = dict["name"] as? String else { throw ObjectParserError.missing("Issue Name") }
-        guard let color = dict["color"] as? String else { throw ObjectParserError.missing("Issue Color") }
+}
+
+class LabelParser: Parser {
+    static func parse(dict: [String : Any]) throws -> Issue.Label {
+        guard let name = dict["name"] as? String else { throw ParserError.missing("Issue Name") }
+        guard let color = dict["color"] as? String else { throw ParserError.missing("Issue Color") }
         return Issue.Label(name: name, color: color)
     }
+}
 
-    static private func parseIssue(dict: [String: Any]) throws -> Issue {
-        guard let title = dict["title"] as? String else { throw ObjectParserError.missing("Title") }
-        guard let body = dict["body"] as? String else { throw ObjectParserError.missing("Body") }
-        guard let commentsURLString = dict["comments_url"] as? String else { throw ObjectParserError.missing("Comments URL") }
-        guard let commentsURL = URL(string: commentsURLString) else { throw ObjectParserError.invalid("Comments URL") }
-        guard let userData = dict["user"] as? [String: Any] else { throw ObjectParserError.missing("User") }
-        guard let id = dict["id"] as? Int else { throw ObjectParserError.missing("ID") }
-        
+class IssueParser: Parser {
+    static func parse(dict: [String : Any]) throws -> Issue {
+        guard let title = dict["title"] as? String else { throw ParserError.missing("Title") }
+        guard let body = dict["body"] as? String else { throw ParserError.missing("Body") }
+        guard let commentsURLString = dict["comments_url"] as? String else { throw ParserError.missing("Comments URL") }
+        guard let commentsURL = URL(string: commentsURLString) else { throw ParserError.invalid("Comments URL") }
+        guard let userData = dict["user"] as? [String: Any] else { throw ParserError.missing("User") }
+        guard let id = dict["id"] as? Int else { throw ParserError.missing("ID") }
+        guard let number = dict["number"] as? Int else { throw ParserError.missing("number") }
+
         let labelsData = dict["labels"] as? [[String: Any]] ?? [[String: Any]]()
-        let labels = try ObjectParser<Issue.Label>.parse(dicts: labelsData)
-        
+        let labels = try LabelParser.parse(dicts: labelsData)
+
         let user: User
         do {
-            user = try ObjectParser<User>.parse(dict: userData)
+            user = try UserParser.parse(dict: userData)
         } catch {
-            throw ObjectParserError.invalid("User")
+            throw ParserError.invalid("User")
         }
-        
-        return Issue(id: id, title: title, body: body, labels: labels, commentsURL: commentsURL, author: user)
+
+        return Issue(
+            id: id,
+            title: title,
+            body: body,
+            labels: labels,
+            commentsURL: commentsURL,
+            author: user,
+            number: number
+        )
     }
-    
-    static private func parseComment(dict: [String: Any]) throws -> Comment {
-        guard let id = dict["id"] as? Int else { throw ObjectParserError.missing("id") }
-        guard let body = dict["body"] as? String else { throw ObjectParserError.missing("Body") }
-        guard let userData = dict["user"] as? [String: Any] else { throw ObjectParserError.missing("User") }
-        
+}
+
+class CommentParser: Parser {
+    static func parse(dict: [String : Any]) throws -> Comment {
+        guard let id = dict["id"] as? Int else { throw ParserError.missing("id") }
+        guard let body = dict["body"] as? String else { throw ParserError.missing("Body") }
+        guard let userData = dict["user"] as? [String: Any] else { throw ParserError.missing("User") }
+
         let user: User
         do {
-            user = try ObjectParser<User>.parse(dict: userData)
+            user = try UserParser.parse(dict: userData)
         } catch {
-            throw ObjectParserError.invalid("User")
+            throw ParserError.invalid("User")
         }
-        
+
         return Comment(id: id, body: body, author: user)
     }
-    
-    static private func parseUser(dict: [String: Any]) throws -> User {
-        guard let username = dict["login"] as? String else { throw ObjectParserError.missing("Username") }
-        guard let id = dict["id"] as? Int else { throw ObjectParserError.missing("ID") }
-        
+}
+
+class UserParser: Parser {
+    static func parse(dict: [String : Any]) throws -> User {
+        guard let username = dict["login"] as? String else { throw ParserError.missing("Username") }
+        guard let id = dict["id"] as? Int else { throw ParserError.missing("ID") }
+
         let avatarUrl: URL?
         if let urlString = dict["avatar_url"] as? String {
             avatarUrl = URL(string: urlString)
         } else {
             avatarUrl = nil
         }
-        
+
         return User(id: id, username: username, avatar: avatarUrl)
     }
 }
