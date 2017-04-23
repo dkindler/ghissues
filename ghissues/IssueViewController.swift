@@ -33,6 +33,24 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
         return tv
     }()
     
+    static func defaultInstance(issue: Issue) -> IssueViewController {
+        let vc = IssueViewController()
+        vc.title = issue.title
+        vc.issue = issue
+        
+        GithubClient.fetchComments(issue: issue).call(completion: { (comments, error) in
+            //TODO: Handle Error
+            guard let comments = comments as? [Comment] else {
+                vc.comments = [Comment]()
+                return
+            }
+            
+            vc.comments = comments
+        })
+        
+        return vc
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

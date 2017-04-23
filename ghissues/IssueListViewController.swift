@@ -28,7 +28,8 @@ class IssueListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     static func defaultInstance(for repo: Repo) -> IssueListViewController {
         let issuesVC = IssueListViewController()
-
+        issuesVC.title = repo.name
+        
         GithubClient.fetchIssues(repo: repo).call { (issues, error) in
             //TODO: Handle Error
             guard let issues = issues as? [Issue] else {
@@ -40,19 +41,7 @@ class IssueListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         issuesVC.didSelectIssue = { (issue) in
-            let singleIssueVC = IssueViewController()
-            singleIssueVC.issue = issue
-
-            GithubClient.fetchComments(issue: issue).call(completion: { (comments, error) in
-                //TODO: Handle Error
-                guard let comments = comments as? [Comment] else {
-                    singleIssueVC.comments = [Comment]()
-                    return
-                }
-
-                singleIssueVC.comments = comments
-            })
-            
+            let singleIssueVC = IssueViewController.defaultInstance(issue: issue)
             issuesVC.show(singleIssueVC, sender: issuesVC)
         }
         
