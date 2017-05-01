@@ -59,10 +59,8 @@ class GithubClient {
     enum ServiceError: Error {
         case invalid(String)
     }
-
-    typealias Completion<T> = ((T?, Error?) -> ())
-
-    func fetchResource<R>(resource: R, completion: Completion<[R.ResourceParser.T]>?) where R: Resource {
+    
+    func fetchResource<R>(resource: R, completion: (([R.ResourceParser.T]?, Error?) -> ())?) where R: Resource {
         guard let url = URL(string: resource.path, relativeTo: baseURL) else { return }
 
         Alamofire.request(url).responseJSON { response in

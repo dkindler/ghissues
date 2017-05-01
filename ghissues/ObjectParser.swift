@@ -33,12 +33,24 @@ class RepoParser: Parser {
         guard let fullName = dict["full_name"] as? String else { throw ParserError.missing("Full Name") }
         guard let url = URL(string: stringURL) else { throw ParserError.invalid("URL String") }
         guard let id = dict["id"] as? Int else { throw ParserError.missing("ID") }
+        guard let openIssuesCount = dict["open_issues_count"] as? Int else { throw ParserError.missing("Open Issues Count") }
+        guard let language = dict["language"] as? String else { throw ParserError.missing("Language") }
+        guard let updatedDateString = dict["updated_at"] as? String else { throw ParserError.missing("Updated Date String") }
+        guard let updated = Date.from(string: updatedDateString) else { throw ParserError.invalid("Updated Date String") }
 
         // "issues_url" includes "{/number}" at the end of the URL. We must truncate this from the string.
         let endIndex = stringIssuesURL.index(stringIssuesURL.endIndex, offsetBy: -9)
         guard let issuesURL = URL(string: stringIssuesURL.substring(to: endIndex)) else { throw ParserError.invalid("Issues URL String") }
 
-        return Repo(id: id, name: name, fullName: fullName, url: url, issuesURL: issuesURL)
+        return Repo(id: id,
+                    name: name,
+                    fullName: fullName,
+                    url: url,
+                    issuesURL: issuesURL,
+                    updated: updated,
+                    openIssuesCount: openIssuesCount,
+                    language: language
+        )
     }
 }
 

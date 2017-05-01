@@ -9,9 +9,7 @@
 import UIKit
 import LayoutKit
 
-class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDelegate {
-
-    private var reloadableViewLayoutAdapter: CustomReloadableViewLayoutAdapter!
+class IssueViewController: LayoutTableViewController {
 
     var repo: Repo?
     var issue: Issue?
@@ -20,19 +18,6 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
             reloadTableView()
         }
     }
-    
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: self.view.frame)
-        self.reloadableViewLayoutAdapter = CustomReloadableViewLayoutAdapter(reloadableView: tv)
-        self.reloadableViewLayoutAdapter.delegate = self
-        tv.allowsSelection = false
-        tv.separatorStyle = .none
-        tv.dataSource = self.reloadableViewLayoutAdapter
-        tv.delegate = self.reloadableViewLayoutAdapter
-        tv.backgroundColor = .white
-        tv.frame = self.view.bounds
-        return tv
-    }()
     
     static func defaultInstance(repo: Repo, issue: Issue) -> IssueViewController {
         let vc = IssueViewController()
@@ -55,7 +40,8 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(tableView)
+        tableView.allowsSelection = false
+        tableView.separatorStyle = .none
     }
     
     private func reloadTableView() {
@@ -77,21 +63,8 @@ class IssueViewController: UIViewController, CustomReloadableViewLayoutAdapterDe
     
     //MARK: Reloadable View Delegate
 
-    func didSelectItemAt(indexPath: IndexPath) {
+    override func didSelectItemAt(indexPath: IndexPath) {
         
     }
 }
 
-//MARK: CustomReloadableViewLayoutAdapter and Delegate
-
-protocol CustomReloadableViewLayoutAdapterDelegate: class {
-    func didSelectItemAt(indexPath: IndexPath)
-}
-
-class CustomReloadableViewLayoutAdapter: ReloadableViewLayoutAdapter {
-    weak var delegate: CustomReloadableViewLayoutAdapterDelegate?
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didSelectItemAt(indexPath: indexPath)
-    }
-}

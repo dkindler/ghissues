@@ -7,57 +7,21 @@
 //
 
 import UIKit
+import LayoutKit
 
-class RepoListDataSource: NSObject, UITableViewDataSource {
-    let repos: [Repo]
-    static let reuseIdentifier = "repoCell"
-
-    init(repos: [Repo]) {
-        self.repos = repos
-    }
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return repos.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RepoListDataSource.reuseIdentifier, for: indexPath)
-        cell.textLabel?.text = repos[indexPath.item].name
-        return cell
-    }
-}
-
-class RepoListViewController: UIViewController, UITableViewDelegate {
+class RepoListViewController: LayoutTableViewController{
 
     var didSelectRepo: ((Repo) -> Void)?
     var repos = [Repo]() {
         didSet {
-            dataSource = RepoListDataSource(repos: repos)
-            tableView.reloadData()
+            reloadTableView()
         }
     }
 
-    var dataSource: RepoListDataSource? {
-        didSet {
-            tableView.dataSource = dataSource
-        }
-    }
-
-    lazy var tableView: UITableView = {
-        let tv = UITableView()
-        tv.delegate = self
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.register(UITableViewCell.self, forCellReuseIdentifier: RepoListDataSource.reuseIdentifier)
-        return tv
-    }()
-    
     static func defaultInstance(for username: String) -> RepoListViewController {
         let repoVC = RepoListViewController()
-
+        repoVC.title = "\(username)'s repos"
+        
         GithubClient.default.fetchResource(resource: GetReposResource(username: username)) { repos, error in
             //TODO: Handle Error
             guard let repos = repos else {
@@ -76,19 +40,20 @@ class RepoListViewController: UIViewController, UITableViewDelegate {
         return repoVC
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private func reloadTableView() {
+        let layouts = repos.map { r in
+            RepoCellLayout(repoTitle: r.name, updated: r.updated, language: r.language, issueCount: r.openIssuesCount)
+        }
         
-        view.addSubview(tableView)
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        reloadableViewLayoutAdapter.reload(width: self.tableView.frame.width, synchronous: true, layoutProvider: {
+            [Section<[Layout]>(header: nil, items: layouts, footer: nil)]
+        })
     }
 
-    //MARK: Table View Delegate
+    // MARK: Reloadable View Layout Adapter Delegate
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func didSelectItemAt(indexPath: IndexPath) {
         didSelectRepo?(repos[indexPath.item])
     }
+
 }

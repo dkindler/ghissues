@@ -20,6 +20,9 @@
 		16A7626D1EA8FD46004EDDED /* RepoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A7626C1EA8FD46004EDDED /* RepoListViewController.swift */; };
 		16A762711EA8FEBC004EDDED /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A762701EA8FEBC004EDDED /* Repo.swift */; };
 		16A762751EA92AC5004EDDED /* GithubClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A762741EA92AC5004EDDED /* GithubClient.swift */; };
+		16E988871EB7E1D500561CE6 /* LayoutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E988861EB7E1D500561CE6 /* LayoutTableViewController.swift */; };
+		16E988891EB7E2DF00561CE6 /* RepoCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E988881EB7E2DF00561CE6 /* RepoCellLayout.swift */; };
+		16E9888C1EB7E7EB00561CE6 /* Date+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E9888B1EB7E7EB00561CE6 /* Date+Helper.swift */; };
 		F7BE041C8DDADA8344297A8A /* Pods_ghissues.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D35BC45D237CFCB119D53547 /* Pods_ghissues.framework */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +42,9 @@
 		16A7626C1EA8FD46004EDDED /* RepoListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepoListViewController.swift; sourceTree = "<group>"; };
 		16A762701EA8FEBC004EDDED /* Repo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
 		16A762741EA92AC5004EDDED /* GithubClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubClient.swift; sourceTree = "<group>"; };
+		16E988861EB7E1D500561CE6 /* LayoutTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutTableViewController.swift; sourceTree = "<group>"; };
+		16E988881EB7E2DF00561CE6 /* RepoCellLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepoCellLayout.swift; sourceTree = "<group>"; };
+		16E9888B1EB7E7EB00561CE6 /* Date+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Helper.swift"; sourceTree = "<group>"; };
 		8C2BFBF019434FDB6C98D829 /* Pods-ghissues.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ghissues.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ghissues/Pods-ghissues.debug.xcconfig"; sourceTree = "<group>"; };
 		D35BC45D237CFCB119D53547 /* Pods_ghissues.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ghissues.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF594F7B405B1AA9FB7E50DD /* Pods-ghissues.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ghissues.release.xcconfig"; path = "Pods/Target Support Files/Pods-ghissues/Pods-ghissues.release.xcconfig"; sourceTree = "<group>"; };
@@ -60,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				1689D6811EA9620E00915A28 /* CommentCellLayout.swift */,
+				16E988881EB7E2DF00561CE6 /* RepoCellLayout.swift */,
 			);
 			name = Layouts;
 			sourceTree = "<group>";
@@ -85,6 +92,7 @@
 		16A762591EA8FC28004EDDED /* ghissues */ = {
 			isa = PBXGroup;
 			children = (
+				16E9888A1EB7E7D500561CE6 /* General */,
 				1689D6801EA961B000915A28 /* Layouts */,
 				16A7626F1EA8FEB0004EDDED /* Data */,
 				16A7626E1EA8FD4C004EDDED /* Controllers */,
@@ -102,6 +110,7 @@
 				16A7626C1EA8FD46004EDDED /* RepoListViewController.swift */,
 				1689D67C1EA95AF500915A28 /* IssueListViewController.swift */,
 				1689D67E1EA95ECB00915A28 /* IssueViewController.swift */,
+				16E988861EB7E1D500561CE6 /* LayoutTableViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -117,6 +126,14 @@
 				1689D67A1EA959C900915A28 /* Comment.swift */,
 			);
 			name = Data;
+			sourceTree = "<group>";
+		};
+		16E9888A1EB7E7D500561CE6 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				16E9888B1EB7E7EB00561CE6 /* Date+Helper.swift */,
+			);
+			name = General;
 			sourceTree = "<group>";
 		};
 		2A58BE4360783649BE21E7D9 /* Frameworks */ = {
@@ -269,7 +286,10 @@
 				1689D6821EA9620E00915A28 /* CommentCellLayout.swift in Sources */,
 				16A7625B1EA8FC28004EDDED /* AppDelegate.swift in Sources */,
 				1689D67D1EA95AF500915A28 /* IssueListViewController.swift in Sources */,
+				16E988891EB7E2DF00561CE6 /* RepoCellLayout.swift in Sources */,
+				16E9888C1EB7E7EB00561CE6 /* Date+Helper.swift in Sources */,
 				1689D6701EA94B2600915A28 /* Issue.swift in Sources */,
+				16E988871EB7E1D500561CE6 /* LayoutTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,5 +9,6 @@ target 'ghissues' do
   pod 'Alamofire'
   pod 'LayoutKit'
   pod 'AlamofireImage'
+  pod 'AFDateHelper', '~> 4.0.1'
 
 end

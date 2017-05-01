@@ -14,13 +14,19 @@ struct Repo {
     let fullName: String
     let url: URL
     let issuesURL: URL
+    let openIssuesCount: Int
+    let updated: Date
+    let language: String
     
     
-    init(id: Int, name: String, fullName: String, url: URL, issuesURL: URL) {
+    init(id: Int, name: String, fullName: String, url: URL, issuesURL: URL, updated: Date, openIssuesCount: Int, language: String) {
         self.id = id
         self.name = name
         self.url = url
         self.issuesURL = issuesURL
         self.fullName = fullName
+        self.openIssuesCount = openIssuesCount
+        self.updated = updated
+        self.language = language
     }
 }
