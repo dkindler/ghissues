@@ -7,13 +7,15 @@
 //
 
 import UIKit
-import LayoutKit
 
 class RepoListViewController: LayoutTableViewController{
 
     var didSelectRepo: ((Repo) -> Void)?
     var repos = [Repo]() {
         didSet {
+            layouts = repos.map { r in
+                RepoCellLayout(repoTitle: r.name, updated: r.updated, language: r.language, issueCount: r.openIssuesCount)
+            }
             reloadTableView()
         }
     }
@@ -39,21 +41,10 @@ class RepoListViewController: LayoutTableViewController{
         
         return repoVC
     }
-    
-    private func reloadTableView() {
-        let layouts = repos.map { r in
-            RepoCellLayout(repoTitle: r.name, updated: r.updated, language: r.language, issueCount: r.openIssuesCount)
-        }
-        
-        reloadableViewLayoutAdapter.reload(width: self.tableView.frame.width, synchronous: true, layoutProvider: {
-            [Section<[Layout]>(header: nil, items: layouts, footer: nil)]
-        })
-    }
 
     // MARK: Reloadable View Layout Adapter Delegate
     
     override func didSelectItemAt(indexPath: IndexPath) {
         didSelectRepo?(repos[indexPath.item])
     }
-
 }

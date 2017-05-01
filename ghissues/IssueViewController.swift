@@ -15,6 +15,16 @@ class IssueViewController: LayoutTableViewController {
     var issue: Issue?
     var comments = [Comment]() {
         didSet {
+            guard let issue = issue else { return }
+            
+            let issueLayout = CommentCellLayout(
+                username: issue.author.username,
+                avatar: issue.author.avatar,
+                commentBody: issue.body.isEmpty ? issue.title : issue.body
+            )
+            let commentLayouts = comments.map { c in CommentCellLayout(username: c.author.username, avatar: c.author.avatar, commentBody: c.body) }
+            
+            layouts = [issueLayout] + commentLayouts
             reloadTableView()
         }
     }
@@ -23,7 +33,7 @@ class IssueViewController: LayoutTableViewController {
         let vc = IssueViewController()
         vc.title = issue.title
         vc.issue = issue
-
+        
         GithubClient.default.fetchResource(resource: GetCommentsResource(repo: repo, issue: issue)) { comments, error in
             //TODO: Handle Error
             guard let comments = comments else {
@@ -42,23 +52,6 @@ class IssueViewController: LayoutTableViewController {
         
         tableView.allowsSelection = false
         tableView.separatorStyle = .none
-    }
-    
-    private func reloadTableView() {
-        guard let issue = issue else { return }
-
-        let issueLayout = CommentCellLayout(
-            username: issue.author.username,
-            avatar: issue.author.avatar,
-            commentBody: issue.body.isEmpty ? issue.title : issue.body
-        )
-        let commentLayouts = comments.map { c in CommentCellLayout(username: c.author.username, avatar: c.author.avatar, commentBody: c.body) }
-
-        let layouts = [issueLayout] + commentLayouts
-
-        reloadableViewLayoutAdapter.reload(width: self.tableView.frame.width, synchronous: true, layoutProvider: {
-            [Section<[Layout]>(header: nil, items: layouts, footer: nil)]
-        })
     }
     
     //MARK: Reloadable View Delegate

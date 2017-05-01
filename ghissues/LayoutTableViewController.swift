@@ -12,6 +12,7 @@ import LayoutKit
 class LayoutTableViewController: UIViewController, CustomReloadableViewLayoutAdapterDelegate {
 
     var reloadableViewLayoutAdapter: CustomReloadableViewLayoutAdapter!
+    var layouts: [InsetLayout<View>]?
     
     lazy var tableView: UITableView = {
         let tv = UITableView()
@@ -33,6 +34,12 @@ class LayoutTableViewController: UIViewController, CustomReloadableViewLayoutAda
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    func reloadTableView() {
+        reloadableViewLayoutAdapter.reload(width: self.tableView.frame.width, synchronous: true, layoutProvider: {
+            [Section<[Layout]>(header: nil, items: self.layouts ?? [], footer: nil)]
+        })
     }
     
     // MARK: Reloadable View Layout Adapter Delegate
