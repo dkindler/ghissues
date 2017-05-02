@@ -4,8 +4,9 @@ A barebone Github issues client.
 
 #### Todo
 
-- Visually appealing UI
-- Loading indicators
+- Visually appealing UI. Including but not limited to:
+   1. Render markdown in comments
+   2. Loading indicators
 - Support Github authentication
    1. Respond to issues  
 - View repositories not owned by user, but contributed to by them
