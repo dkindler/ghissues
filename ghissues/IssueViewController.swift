@@ -22,10 +22,11 @@ class IssueViewController: LayoutTableViewController {
                 avatar: issue.author.avatar,
                 commentBody: issue.body.isEmpty ? issue.title : issue.body
             )
-            let commentLayouts = comments.map { c in CommentCellLayout(username: c.author.username, avatar: c.author.avatar, commentBody: c.body) }
+            let commentLayouts = comments.map { c in
+                CommentCellLayout(username: c.author.username, avatar: c.author.avatar, commentBody: c.body)
+            }
             
             layouts = [issueLayout] + commentLayouts
-            reloadTableView()
         }
     }
     

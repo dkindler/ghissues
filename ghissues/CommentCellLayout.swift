@@ -57,7 +57,6 @@ class CommentCellLayout: InsetLayout<View> {
             alignment: Alignment.topLeading,
             sublayouts: [name, body]
         )
-
         
         super.init(
             insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),

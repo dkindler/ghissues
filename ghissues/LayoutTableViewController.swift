@@ -12,7 +12,11 @@ import LayoutKit
 class LayoutTableViewController: UIViewController, CustomReloadableViewLayoutAdapterDelegate {
 
     var reloadableViewLayoutAdapter: CustomReloadableViewLayoutAdapter!
-    var layouts: [InsetLayout<View>]?
+    var layouts: [InsetLayout<View>]? {
+        didSet {
+            reloadTableView()
+        }
+    }
     
     lazy var tableView: UITableView = {
         let tv = UITableView()

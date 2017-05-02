@@ -71,6 +71,9 @@ class IssueParser: Parser {
         guard let userData = dict["user"] as? [String: Any] else { throw ParserError.missing("User") }
         guard let id = dict["id"] as? Int else { throw ParserError.missing("ID") }
         guard let number = dict["number"] as? Int else { throw ParserError.missing("number") }
+        guard let createdAtString = dict["created_at"] as? String else { throw ParserError.missing("Created At String") }
+        guard let createdAt = Date.from(string: createdAtString) else { throw ParserError.invalid("Created At String") }
+
 
         let labelsData = dict["labels"] as? [[String: Any]] ?? [[String: Any]]()
         let labels = try LabelParser.parse(dicts: labelsData)
@@ -89,7 +92,8 @@ class IssueParser: Parser {
             labels: labels,
             commentsURL: commentsURL,
             author: user,
-            number: number
+            number: number,
+            createdAt: createdAt
         )
     }
 }
@@ -99,7 +103,9 @@ class CommentParser: Parser {
         guard let id = dict["id"] as? Int else { throw ParserError.missing("id") }
         guard let body = dict["body"] as? String else { throw ParserError.missing("Body") }
         guard let userData = dict["user"] as? [String: Any] else { throw ParserError.missing("User") }
-
+        guard let createdAtString = dict["created_at"] as? String else { throw ParserError.missing("Created At String") }
+        guard let createdAt = Date.from(string: createdAtString) else { throw ParserError.invalid("Created At String") }
+        
         let user: User
         do {
             user = try UserParser.parse(dict: userData)
@@ -107,7 +113,7 @@ class CommentParser: Parser {
             throw ParserError.invalid("User")
         }
 
-        return Comment(id: id, body: body, author: user)
+        return Comment(id: id, body: body, author: user, createdAt: createdAt)
     }
 }
 

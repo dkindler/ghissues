@@ -13,30 +13,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var nav: UINavigationController?
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         let repoViewController = RepoListViewController.defaultInstance(for: "linkedin")
-        let nav = UINavigationController(rootViewController: repoViewController)
-        
-        let searchButton = UIBarButtonItem(image: UIImage(named: "search"),
-                                           style: .plain,
-                                           target: self,
-                                           action: #selector(didPressSearchButton))
-        
-        repoViewController.navigationItem.rightBarButtonItem = searchButton
-        
+        self.nav = UINavigationController(rootViewController: repoViewController)
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = .white
-        self.window?.rootViewController = nav
+        self.window?.rootViewController = self.nav
         self.window?.makeKeyAndVisible()
-
-        return true
-    }
-    
-    // MARK: Private
-    
-    @objc private func didPressSearchButton() {
         
+        return true
     }
 }
 

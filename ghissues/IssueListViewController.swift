@@ -8,23 +8,16 @@
 
 import UIKit
 
-class IssueListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class IssueListViewController: LayoutTableViewController {
 
     var didSelectIssue: ((Issue) -> Void)?
     var issues = [Issue]() {
         didSet {
-            tableView.reloadData()
+            layouts = issues.map { i in
+                CommentCellLayout(username: i.author.username, avatar: i.author.avatar, commentBody: i.title)
+            }
         }
     }
-    
-    lazy var tableView: UITableView = {
-        let tv = UITableView()
-        tv.delegate = self
-        tv.dataSource = self
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.register(UITableViewCell.self, forCellReuseIdentifier: "issueCell")
-        return tv
-    }()
     
     static func defaultInstance(for repo: Repo) -> IssueListViewController {
         let issuesVC = IssueListViewController()
@@ -50,33 +43,11 @@ class IssueListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.addSubview(tableView)
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-    
-    //MARK: Table View Data Source
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return issues.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "issueCell", for: indexPath)
-        cell.textLabel?.text = issues[indexPath.item].title
-        return cell
     }
     
     //MARK: Table View Delegate
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func didSelectItemAt(indexPath: IndexPath) {
         didSelectIssue?(issues[indexPath.item])
     }
 }
