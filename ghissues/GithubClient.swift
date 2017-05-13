@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 import Alamofire
 
 protocol Resource {
@@ -60,17 +61,21 @@ class GithubClient {
         case invalid(String)
     }
     
-    func fetchResource<R>(resource: R, completion: (([R.ResourceParser.T]?, Error?) -> ())?) where R: Resource {
-        guard let url = URL(string: resource.path, relativeTo: baseURL) else { return }
-
-        Alamofire.request(url).responseJSON { response in
-            if let json = response.result.value as? [[String: Any]] {
-                do {
-                    let result = try json.map { dict in try R.ResourceParser.parse(dict: dict) }
-                    completion?(result, nil)
-                } catch {
-                    completion?(nil, error)
+    func fetchResource<R>(resource: R) -> Promise<[R.ResourceParser.T]> where R: Resource {
+        return Promise { fulfill, reject in
+            if let url = URL(string: resource.path, relativeTo: baseURL) {
+                Alamofire.request(url).responseJSON { response in
+                    if let json = response.result.value as? [[String: Any]] {
+                        do {
+                            let result = try json.map { dict in try R.ResourceParser.parse(dict: dict) }
+                            fulfill(result)
+                        } catch {
+                            reject(error)
+                        }
+                    }
                 }
+            } else {
+                reject(ServiceError.invalid("URL"))
             }
         }
     }

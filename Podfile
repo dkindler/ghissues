@@ -10,5 +10,6 @@ target 'ghissues' do
   pod 'LayoutKit'
   pod 'AlamofireImage'
   pod 'AFDateHelper', '~> 4.0.1'
+  pod 'PromiseKit'
 
 end

@@ -25,14 +25,10 @@ class RepoListViewController: LayoutTableViewController{
         let repoVC = RepoListViewController()
         repoVC.title = "\(username)'s repos"
         
-        GithubClient.default.fetchResource(resource: GetReposResource(username: username)) { repos, error in
-            //TODO: Handle Error
-            guard let repos = repos else {
-                repoVC.repos = [Repo]()
-                return
-            }
-            
+        GithubClient.default.fetchResource(resource: GetReposResource(username: username)).then { repos in
             repoVC.repos = repos
+        }.catch { error in
+            //TODO
         }
         
         repoVC.didSelectRepo = { (repo) in

@@ -23,16 +23,12 @@ class IssueListViewController: LayoutTableViewController {
         let issuesVC = IssueListViewController()
         issuesVC.title = repo.name
 
-        GithubClient.default.fetchResource(resource: GetIssuesResource(repo: repo)) { issues, error in
-            //TODO: Handle Error
-            guard let issues = issues else {
-                issuesVC.issues = [Issue]()
-                return
-            }
-            
+        GithubClient.default.fetchResource(resource: GetIssuesResource(repo: repo)).then { issues in
             issuesVC.issues = issues
+        }.catch { error in
+            //TODO: Throw error
         }
-        
+
         issuesVC.didSelectIssue = { (issue) in
             let singleIssueVC = IssueViewController.defaultInstance(repo: repo, issue: issue)
             issuesVC.show(singleIssueVC, sender: issuesVC)

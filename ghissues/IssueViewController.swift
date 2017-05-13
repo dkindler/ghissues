@@ -35,14 +35,10 @@ class IssueViewController: LayoutTableViewController {
         vc.title = issue.title
         vc.issue = issue
         
-        GithubClient.default.fetchResource(resource: GetCommentsResource(repo: repo, issue: issue)) { comments, error in
-            //TODO: Handle Error
-            guard let comments = comments else {
-                vc.comments = [Comment]()
-                return
-            }
-            
+        GithubClient.default.fetchResource(resource: GetCommentsResource(repo: repo, issue: issue)).then { comments in
             vc.comments = comments
+        }.catch { error in
+            //TODO
         }
         
         return vc
