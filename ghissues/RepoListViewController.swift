@@ -75,6 +75,7 @@ class RepoListViewController: LayoutTableViewController{
     // MARK: Reloadable View Layout Adapter Delegate
     
     override func didSelectItemAt(indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         didSelectRepo(repos[indexPath.item])
     }
     

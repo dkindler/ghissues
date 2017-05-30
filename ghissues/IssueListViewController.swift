@@ -44,6 +44,7 @@ class IssueListViewController: LayoutTableViewController {
     //MARK: Table View Delegate
     
     override func didSelectItemAt(indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         didSelectIssue?(issues[indexPath.item])
     }
 }
